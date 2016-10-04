@@ -59,7 +59,7 @@ void setup() {
   uint8_t uuid[16] = {0xE2, 0xC5, 0x6D, 0xB5, 0xDF, 0xFB, 0x48, 0xD2, 0xB0, 0x60, 0xD0, 0xF5, 0xA7, 0x10, 0x96, 0xE0};
   memcpy(RFduinoBLE.iBeaconUUID, uuid, sizeof(RFduinoBLE.iBeaconUUID));
   RFduinoBLE.iBeaconMajor = 1234;
-  RFduinoBLE.iBeaconMinor = 5690;
+  RFduinoBLE.iBeaconMinor = 5670;
   RFduinoBLE.iBeaconMeasuredPower = 0xC6;
 
   // start the BLE stack
@@ -75,8 +75,8 @@ void loop() {
 
     if (!BA) {
       my_led_func(true);
-//      RFduinoBLE.iBeacon = true;
-    RFduinoBLE.end();
+      //      RFduinoBLE.iBeacon = true;
+      RFduinoBLE.end();
     }
     BA = true;
 
@@ -86,8 +86,9 @@ void loop() {
 
     if (BA) {
       my_led_func(false);
-
-//      RFduinoBLE.iBeacon = false;
+      RFduinoBLE.iBeaconMajor = 1234;
+      RFduinoBLE.iBeaconMinor = 5671;
+      RFduinoBLE.begin();
     }
     BA = false;
 
