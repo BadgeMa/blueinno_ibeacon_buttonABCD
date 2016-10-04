@@ -77,22 +77,35 @@ void loop() {
       my_led_func(true);
       //      RFduinoBLE.iBeacon = true;
       RFduinoBLE.end();
+      RFduinoBLE.iBeaconMajor = 1234;
+      RFduinoBLE.iBeaconMinor = 5671;
+      RFduinoBLE.begin();
+
+      //단지, end, begin 없이 Major와 Minor만 바꾸면 동작 안함.
+      //      RFduinoBLE.iBeaconMajor = 1234;
+      //      RFduinoBLE.iBeaconMinor = 5671;
     }
-    BA = true;
+
 
     while (digitalRead(ButtonA) == LOW);
+
+    BA = true;
   } else {
 
 
     if (BA) {
       my_led_func(false);
+
+      RFduinoBLE.end();
       RFduinoBLE.iBeaconMajor = 1234;
-      RFduinoBLE.iBeaconMinor = 5671;
+      RFduinoBLE.iBeaconMinor = 5670;
       RFduinoBLE.begin();
     }
-    BA = false;
+
 
     while (digitalRead(ButtonA) == HIGH);
+
+    BA = false;
   }
 
 }
