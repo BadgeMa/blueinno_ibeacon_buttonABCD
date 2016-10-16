@@ -59,7 +59,7 @@ void setup() {
   uint8_t uuid[16] = {0xE2, 0xC5, 0x6D, 0xB5, 0xDF, 0xFB, 0x48, 0xD2, 0xB0, 0x60, 0xD0, 0xF5, 0xA7, 0x10, 0x96, 0xE0};
   memcpy(RFduinoBLE.iBeaconUUID, uuid, sizeof(RFduinoBLE.iBeaconUUID));
   RFduinoBLE.iBeaconMajor = 1234;
-  RFduinoBLE.iBeaconMinor = 5670;
+  RFduinoBLE.iBeaconMinor = 5678;
   RFduinoBLE.iBeaconMeasuredPower = 0xC6;
 
   // start the BLE stack
@@ -70,45 +70,63 @@ void loop() {
   // switch to lower power mode
   //RFduino_ULPDelay(INFINITE);
 
+  //ButtonA가 눌렸을 때
   if (digitalRead(ButtonA) == LOW) {
-
-
     if (!BA) {
       my_led_func(true);
       //      RFduinoBLE.iBeacon = true;
       RFduinoBLE.end();
-      RFduinoBLE.iBeaconMajor = 1234;
-      RFduinoBLE.iBeaconMinor = 5671;
+      RFduinoBLE.iBeaconMajor = 1003;
+      RFduinoBLE.iBeaconMinor = 1225;
       RFduinoBLE.begin();
 
       //단지, end, begin 없이 Major와 Minor만 바꾸면 동작 안함.
       //      RFduinoBLE.iBeaconMajor = 1234;
       //      RFduinoBLE.iBeaconMinor = 5671;
     }
-
-
     while (digitalRead(ButtonA) == LOW);
-
     BA = true;
   } else {
-
-
     if (BA) {
       my_led_func(false);
-
       RFduinoBLE.end();
       RFduinoBLE.iBeaconMajor = 1234;
-      RFduinoBLE.iBeaconMinor = 5670;
+      RFduinoBLE.iBeaconMinor = 5678;
       RFduinoBLE.begin();
     }
-
-
-    while (digitalRead(ButtonA) == HIGH);
-
+    while (digitalRead(ButtonA) == LOW);
     BA = false;
   }
 
+  //ButtonB가 눌렸을 때
+  if (digitalRead(ButtonB) == HIGH) {
+    if (!BB) {
+      my_led_func(true);
+      RFduinoBLE.end();
+      RFduinoBLE.iBeaconMajor = 2003;
+      RFduinoBLE.iBeaconMinor = 1225;
+      RFduinoBLE.begin();
+    }
+    while (digitalRead(ButtonB) == HIGH);
+    BB = true;
+  } else {
+    if (BB) {
+      my_led_func(false);
+      RFduinoBLE.end();
+      RFduinoBLE.iBeaconMajor = 1234;
+      RFduinoBLE.iBeaconMinor = 5678;
+      RFduinoBLE.begin();
+    }
+    while (digitalRead(ButtonB) == HIGH);
+    BB = false;
+  }
+  
 }
+
+
+
+
+
 void my_led_func(bool start)
 {
   // turn the green led on if we start advertisement, and turn it
