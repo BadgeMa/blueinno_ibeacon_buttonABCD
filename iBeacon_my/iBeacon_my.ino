@@ -43,6 +43,9 @@ boolean BB = false;
 boolean BC = false;
 boolean BD = false;
 
+//
+int cnt = 0;
+
 void setup() {
   // led used to indicate that iBeacon has started
   pinMode(led, OUTPUT);
@@ -70,57 +73,95 @@ void loop() {
   // switch to lower power mode
   //RFduino_ULPDelay(INFINITE);
 
-  //ButtonA가 눌렸을 때
   if (digitalRead(ButtonA) == LOW) {
-    if (!BA) {
-      my_led_func(true);
-      //      RFduinoBLE.iBeacon = true;
-      RFduinoBLE.end();
-      RFduinoBLE.iBeaconMajor = 1003;
-      RFduinoBLE.iBeaconMinor = 1225;
-      RFduinoBLE.begin();
-
-      //단지, end, begin 없이 Major와 Minor만 바꾸면 동작 안함.
-      //      RFduinoBLE.iBeaconMajor = 1234;
-      //      RFduinoBLE.iBeaconMinor = 5671;
-    }
-    while (digitalRead(ButtonA) == LOW);
-    BA = true;
-  } else {
-    if (BA) {
-      my_led_func(false);
-      RFduinoBLE.end();
-      RFduinoBLE.iBeaconMajor = 1234;
-      RFduinoBLE.iBeaconMinor = 5678;
-      RFduinoBLE.begin();
-    }
-    while (digitalRead(ButtonA) == LOW);
-    BA = false;
+    delay(1000);
+  }
+  else if (digitalRead(ButtonB) == HIGH) {
+    delay(1000);
   }
 
-  //ButtonB가 눌렸을 때
-  if (digitalRead(ButtonB) == HIGH) {
-    if (!BB) {
-      my_led_func(true);
-      RFduinoBLE.end();
-      RFduinoBLE.iBeaconMajor = 2003;
-      RFduinoBLE.iBeaconMinor = 1225;
-      RFduinoBLE.begin();
-    }
-    while (digitalRead(ButtonB) == HIGH);
-    BB = true;
+  if (digitalRead(ButtonA) == LOW && digitalRead(ButtonB) == HIGH) {
+    my_led_func(false);
+    RFduinoBLE.end();
+
   } else {
-    if (BB) {
-      my_led_func(false);
-      RFduinoBLE.end();
-      RFduinoBLE.iBeaconMajor = 1234;
-      RFduinoBLE.iBeaconMinor = 5678;
-      RFduinoBLE.begin();
+    //ButtonA가 눌렸을 때
+    if (digitalRead(ButtonA) == LOW) {
+      if (!BA) {
+        my_led_func(true);
+        //      RFduinoBLE.iBeacon = true;
+        RFduinoBLE.end();
+        RFduinoBLE.iBeaconMajor = 1003;
+        RFduinoBLE.iBeaconMinor = 1225;
+        RFduinoBLE.begin();
+
+        //단지, end, begin 없이 Major와 Minor만 바꾸면 동작 안함.
+        //      RFduinoBLE.iBeaconMajor = 1234;
+        //      RFduinoBLE.iBeaconMinor = 5671;
+      }
+      while (digitalRead(ButtonA) == LOW) {
+        cnt++;
+        if (cnt > 10000) {
+          break;
+        }
+      }
+      cnt = 0;
+      BA = true;
+    } else {
+      if (BA) {
+        my_led_func(false);
+        RFduinoBLE.end();
+        RFduinoBLE.iBeaconMajor = 1234;
+        RFduinoBLE.iBeaconMinor = 5678;
+        RFduinoBLE.begin();
+      }
+      while (digitalRead(ButtonA) == LOW) {
+        cnt++;
+        if (cnt > 10000) {
+          break;
+        }
+      }
+      cnt = 0;
+      BA = false;
     }
-    while (digitalRead(ButtonB) == HIGH);
-    BB = false;
+
+    //ButtonB가 눌렸을 때
+    if (digitalRead(ButtonB) == HIGH) {
+      if (!BB) {
+        my_led_func(true);
+        RFduinoBLE.end();
+        RFduinoBLE.iBeaconMajor = 2003;
+        RFduinoBLE.iBeaconMinor = 1225;
+        RFduinoBLE.begin();
+      }
+      while (digitalRead(ButtonB) == HIGH) {
+        cnt++;
+        if (cnt > 10000) {
+          break;
+        }
+      }
+      cnt = 0;
+      BB = true;
+    } else {
+      if (BB) {
+        my_led_func(false);
+        RFduinoBLE.end();
+        RFduinoBLE.iBeaconMajor = 1234;
+        RFduinoBLE.iBeaconMinor = 5678;
+        RFduinoBLE.begin();
+      }
+      while (digitalRead(ButtonB) == HIGH) {
+        cnt++;
+        if (cnt > 10000) {
+          break;
+        }
+      }
+      cnt = 0;
+      BB = false;
+    }
+
   }
-  
+
 }
 
 
