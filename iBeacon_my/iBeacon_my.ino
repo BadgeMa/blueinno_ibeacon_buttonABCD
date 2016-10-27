@@ -69,12 +69,12 @@ void setup() {
   // override the default iBeacon settings
   uint8_t uuid[16] = {0xE2, 0xC5, 0x6D, 0xB5, 0xDF, 0xFB, 0x48, 0xD2, 0xB0, 0x60, 0xD0, 0xF5, 0xA7, 0x10, 0x96, 0xE0};
   memcpy(RFduinoBLE.iBeaconUUID, uuid, sizeof(RFduinoBLE.iBeaconUUID));
-  RFduinoBLE.iBeaconMajor = 1234;
-  RFduinoBLE.iBeaconMinor = 5678;
+  RFduinoBLE.iBeaconMajor = 123;
+  RFduinoBLE.iBeaconMinor = 45678;
   RFduinoBLE.iBeaconMeasuredPower = 0xC6;
 
   // start the BLE stack
-  RFduinoBLE.begin();
+//  RFduinoBLE.begin();
 }
 
 void loop() {
@@ -103,8 +103,8 @@ void loop() {
         my_led_func(true, my_led_A);
         //      RFduinoBLE.iBeacon = true;
         RFduinoBLE.end();
-        RFduinoBLE.iBeaconMajor = 1003;
-        RFduinoBLE.iBeaconMinor = 1225;
+        RFduinoBLE.iBeaconMajor = 100;
+        RFduinoBLE.iBeaconMinor = 31225;
         RFduinoBLE.begin();
 
         //단지, end, begin 없이 Major와 Minor만 바꾸면 동작 안함.
@@ -123,9 +123,9 @@ void loop() {
       if (BA) {
         my_led_func(false, my_led_A);
         RFduinoBLE.end();
-        RFduinoBLE.iBeaconMajor = 1234;
-        RFduinoBLE.iBeaconMinor = 5678;
-        RFduinoBLE.begin();
+//        RFduinoBLE.iBeaconMajor = 123;
+//        RFduinoBLE.iBeaconMinor = 45678;
+//        RFduinoBLE.begin();
       }
       while (digitalRead(ButtonA) == LOW) {
         cnt++;
@@ -143,8 +143,8 @@ void loop() {
       if (!BB) {
         my_led_func(true, my_led_B);
         RFduinoBLE.end();
-        RFduinoBLE.iBeaconMajor = 2003;
-        RFduinoBLE.iBeaconMinor = 1225;
+        RFduinoBLE.iBeaconMajor = 200;
+        RFduinoBLE.iBeaconMinor = 31225;
         RFduinoBLE.begin();
       }
       while (digitalRead(ButtonB) == LOW) {
@@ -159,9 +159,9 @@ void loop() {
       if (BB) {
         my_led_func(false, my_led_B);
         RFduinoBLE.end();
-        RFduinoBLE.iBeaconMajor = 1234;
-        RFduinoBLE.iBeaconMinor = 5678;
-        RFduinoBLE.begin();
+//        RFduinoBLE.iBeaconMajor = 123;
+//        RFduinoBLE.iBeaconMinor = 45678;
+//        RFduinoBLE.begin();
       }
       while (digitalRead(ButtonB) == LOW) {
         cnt++;
