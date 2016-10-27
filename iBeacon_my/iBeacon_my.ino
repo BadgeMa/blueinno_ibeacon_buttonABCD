@@ -32,7 +32,9 @@
 
 // pin 3 on the RGB shield is the green led
 int led = 3;
-int my_led = 4;
+int my_led_A = 4;
+int my_led_B = 5;
+
 int ButtonA = 7;
 int ButtonB = 8;
 int ButtonC = 9;
@@ -43,17 +45,23 @@ boolean BB = false;
 boolean BC = false;
 boolean BD = false;
 
+int buzzer = 11;
+
 //
 int cnt = 0;
 
 void setup() {
   // led used to indicate that iBeacon has started
   pinMode(led, OUTPUT);
-  pinMode(my_led, OUTPUT);
+  pinMode(my_led_A, OUTPUT);
+  pinMode(my_led_B, OUTPUT);
+
   pinMode(ButtonA, INPUT);
   pinMode(ButtonB, INPUT);
   pinMode(ButtonC, INPUT);
   pinMode(ButtonD, INPUT);
+
+  pinMode(buzzer, OUTPUT);
 
   // do iBeacon advertising
   RFduinoBLE.iBeacon = true;
@@ -76,19 +84,23 @@ void loop() {
   if (digitalRead(ButtonA) == LOW) {
     delay(1000);
   }
-  else if (digitalRead(ButtonB) == HIGH) {
+  else if (digitalRead(ButtonB) == LOW) {
     delay(1000);
   }
 
-  if (digitalRead(ButtonA) == LOW && digitalRead(ButtonB) == HIGH) {
-    my_led_func(false);
+  if (digitalRead(ButtonA) == LOW && digitalRead(ButtonB) == LOW) {
+    my_led_func(false, my_led_A);
+    my_led_func(false, my_led_B);
+    digitalWrite(buzzer, HIGH);
     RFduinoBLE.end();
 
   } else {
+    digitalWrite(buzzer, LOW);
+    
     //ButtonA가 눌렸을 때
     if (digitalRead(ButtonA) == LOW) {
       if (!BA) {
-        my_led_func(true);
+        my_led_func(true, my_led_A);
         //      RFduinoBLE.iBeacon = true;
         RFduinoBLE.end();
         RFduinoBLE.iBeaconMajor = 1003;
@@ -109,7 +121,7 @@ void loop() {
       BA = true;
     } else {
       if (BA) {
-        my_led_func(false);
+        my_led_func(false, my_led_A);
         RFduinoBLE.end();
         RFduinoBLE.iBeaconMajor = 1234;
         RFduinoBLE.iBeaconMinor = 5678;
@@ -126,15 +138,16 @@ void loop() {
     }
 
     //ButtonB가 눌렸을 때
-    if (digitalRead(ButtonB) == HIGH) {
+    
+    if (digitalRead(ButtonB) == LOW) {
       if (!BB) {
-        my_led_func(true);
+        my_led_func(true, my_led_B);
         RFduinoBLE.end();
         RFduinoBLE.iBeaconMajor = 2003;
         RFduinoBLE.iBeaconMinor = 1225;
         RFduinoBLE.begin();
       }
-      while (digitalRead(ButtonB) == HIGH) {
+      while (digitalRead(ButtonB) == LOW) {
         cnt++;
         if (cnt > 10000) {
           break;
@@ -144,13 +157,13 @@ void loop() {
       BB = true;
     } else {
       if (BB) {
-        my_led_func(false);
+        my_led_func(false, my_led_B);
         RFduinoBLE.end();
         RFduinoBLE.iBeaconMajor = 1234;
         RFduinoBLE.iBeaconMinor = 5678;
         RFduinoBLE.begin();
       }
-      while (digitalRead(ButtonB) == HIGH) {
+      while (digitalRead(ButtonB) == LOW) {
         cnt++;
         if (cnt > 10000) {
           break;
@@ -168,15 +181,15 @@ void loop() {
 
 
 
-void my_led_func(bool start)
+void my_led_func(bool start, int led_con)
 {
   // turn the green led on if we start advertisement, and turn it
   // off if we stop advertisement
 
   if (start)
-    digitalWrite(my_led, HIGH);
+    digitalWrite(led_con, HIGH);
   else
-    digitalWrite(my_led, LOW);
+    digitalWrite(led_con, LOW);
 }
 
 void RFduinoBLE_onAdvertisement(bool start)
