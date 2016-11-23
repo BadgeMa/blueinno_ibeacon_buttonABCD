@@ -2,7 +2,7 @@
   The sketch demonstrates iBecaon from an RFduino
 */
 
-/*
+/*a
   Copyright (c) 2014 OpenSourceRF.com.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -32,15 +32,15 @@
 
 // pin 3 on the RGB shield is the green led
 int led = 6;
-//int my_led_A = 7;
-//int my_led_B = 8;
-int my_led_A = 1;
-int my_led_B = 2;
+int my_led_A = 7;
+int my_led_B = 8;
+//int my_led_A = 1;
+//int my_led_B = 2;
 
-//int ButtonA = 1;
-int ButtonA = 7;
-//int ButtonB = 2;
-int ButtonB = 8;
+int ButtonA = 1;
+//int ButtonA = 7;
+int ButtonB = 2;
+//int ButtonB = 8;
 int ButtonC = 3;
 int ButtonD = 4;
 
@@ -49,13 +49,11 @@ boolean BB = false;
 boolean BC = false;
 boolean BD = false;
 
-//int buzzer = 5;
-int buzzer = 11;
+int buzzer = 5;
+//int buzzer = 11;
 
 //
 int cnt = 0;
-int cnt_A = 0;
-int cnt_B = 0;
 
 void setup() {
   // led used to indicate that iBeacon has started
@@ -110,7 +108,7 @@ void loop() {
           //      RFduinoBLE.iBeacon = true;
           RFduinoBLE.end();
           RFduinoBLE.iBeaconMajor = 100;
-          RFduinoBLE.iBeaconMinor = 31225;
+          RFduinoBLE.iBeaconMinor = 20708;
           RFduinoBLE.begin();
         }
         //단지, end, begin 없이 Major와 Minor만 바꾸면 동작 안함.
@@ -141,7 +139,7 @@ void loop() {
           my_led_func(true, my_led_B);
           RFduinoBLE.end();
           RFduinoBLE.iBeaconMajor = 200;
-          RFduinoBLE.iBeaconMinor = 31225;
+          RFduinoBLE.iBeaconMinor = 20708;
           RFduinoBLE.begin();
         }
       }
