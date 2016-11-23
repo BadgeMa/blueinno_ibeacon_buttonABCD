@@ -31,24 +31,31 @@
 #include <RFduinoBLE.h>
 
 // pin 3 on the RGB shield is the green led
-int led = 3;
-int my_led_A = 4;
-int my_led_B = 5;
+int led = 6;
+//int my_led_A = 7;
+//int my_led_B = 8;
+int my_led_A = 1;
+int my_led_B = 2;
 
+//int ButtonA = 1;
 int ButtonA = 7;
+//int ButtonB = 2;
 int ButtonB = 8;
-int ButtonC = 9;
-int ButtonD = 10;
+int ButtonC = 3;
+int ButtonD = 4;
 
 boolean BA = false;
 boolean BB = false;
 boolean BC = false;
 boolean BD = false;
 
+//int buzzer = 5;
 int buzzer = 11;
 
 //
 int cnt = 0;
+int cnt_A = 0;
+int cnt_B = 0;
 
 void setup() {
   // led used to indicate that iBeacon has started
@@ -67,107 +74,88 @@ void setup() {
   RFduinoBLE.iBeacon = true;
 
   // override the default iBeacon settings
-  uint8_t uuid[16] = {0xE2, 0xC5, 0x6D, 0xB5, 0xDF, 0xFB, 0x48, 0xD2, 0xB0, 0x60, 0xD0, 0xF5, 0xA7, 0x10, 0x96, 0xE0};
+  uint8_t uuid[16] = {0xCD, 0xC5, 0x6D, 0xB5, 0xDF, 0xFB, 0x48, 0xD2, 0xB0, 0x60, 0xD0, 0xF5, 0xA7, 0x10, 0x96, 0xCD};
   memcpy(RFduinoBLE.iBeaconUUID, uuid, sizeof(RFduinoBLE.iBeaconUUID));
   RFduinoBLE.iBeaconMajor = 123;
   RFduinoBLE.iBeaconMinor = 45678;
   RFduinoBLE.iBeaconMeasuredPower = 0xC6;
 
   // start the BLE stack
-//  RFduinoBLE.begin();
+  //RFduinoBLE.begin();
 }
 
 void loop() {
   // switch to lower power mode
   //RFduino_ULPDelay(INFINITE);
 
-  if (digitalRead(ButtonA) == LOW) {
-    delay(1000);
-  }
-  else if (digitalRead(ButtonB) == LOW) {
-    delay(1000);
-  }
-
   if (digitalRead(ButtonA) == LOW && digitalRead(ButtonB) == LOW) {
-    my_led_func(false, my_led_A);
-    my_led_func(false, my_led_B);
-    digitalWrite(buzzer, HIGH);
-    RFduinoBLE.end();
-
+    if (!BA || !BB)delay(1000);
+    if (digitalRead(ButtonA) == LOW && digitalRead(ButtonB) == LOW) {
+      my_led_func(false, my_led_A);
+      my_led_func(false, my_led_B);
+      digitalWrite(buzzer, HIGH);
+      RFduinoBLE.end();
+      BA = false;
+      BB = false;
+    }
   } else {
     digitalWrite(buzzer, LOW);
-    
+
     //ButtonA가 눌렸을 때
     if (digitalRead(ButtonA) == LOW) {
       if (!BA) {
-        my_led_func(true, my_led_A);
-        //      RFduinoBLE.iBeacon = true;
-        RFduinoBLE.end();
-        RFduinoBLE.iBeaconMajor = 100;
-        RFduinoBLE.iBeaconMinor = 31225;
-        RFduinoBLE.begin();
-
+        delay(1000);
+        if (digitalRead(ButtonA) == LOW && digitalRead(ButtonB) != LOW) {
+          my_led_func(true, my_led_A);
+          //      RFduinoBLE.iBeacon = true;
+          RFduinoBLE.end();
+          RFduinoBLE.iBeaconMajor = 100;
+          RFduinoBLE.iBeaconMinor = 31225;
+          RFduinoBLE.begin();
+        }
         //단지, end, begin 없이 Major와 Minor만 바꾸면 동작 안함.
         //      RFduinoBLE.iBeaconMajor = 1234;
         //      RFduinoBLE.iBeaconMinor = 5671;
       }
-      while (digitalRead(ButtonA) == LOW) {
-        cnt++;
-        if (cnt > 10000) {
-          break;
-        }
-      }
+      while (digitalRead(ButtonA) == LOW && digitalRead(ButtonB) != LOW);
       cnt = 0;
       BA = true;
     } else {
       if (BA) {
         my_led_func(false, my_led_A);
         RFduinoBLE.end();
-//        RFduinoBLE.iBeaconMajor = 123;
-//        RFduinoBLE.iBeaconMinor = 45678;
-//        RFduinoBLE.begin();
-      }
-      while (digitalRead(ButtonA) == LOW) {
-        cnt++;
-        if (cnt > 10000) {
-          break;
-        }
+        //        RFduinoBLE.iBeaconMajor = 123;
+        //        RFduinoBLE.iBeaconMinor = 45678;
+        //        RFduinoBLE.begin();
       }
       cnt = 0;
       BA = false;
     }
 
     //ButtonB가 눌렸을 때
-    
+
     if (digitalRead(ButtonB) == LOW) {
       if (!BB) {
-        my_led_func(true, my_led_B);
-        RFduinoBLE.end();
-        RFduinoBLE.iBeaconMajor = 200;
-        RFduinoBLE.iBeaconMinor = 31225;
-        RFduinoBLE.begin();
-      }
-      while (digitalRead(ButtonB) == LOW) {
-        cnt++;
-        if (cnt > 10000) {
-          break;
+        delay(1000);
+        if (digitalRead(ButtonB) == LOW && digitalRead(ButtonA) != LOW) {
+          my_led_func(true, my_led_B);
+          RFduinoBLE.end();
+          RFduinoBLE.iBeaconMajor = 200;
+          RFduinoBLE.iBeaconMinor = 31225;
+          RFduinoBLE.begin();
         }
       }
+      while (digitalRead(ButtonA) != LOW && digitalRead(ButtonB) == LOW);
+
       cnt = 0;
       BB = true;
     } else {
       if (BB) {
         my_led_func(false, my_led_B);
         RFduinoBLE.end();
-//        RFduinoBLE.iBeaconMajor = 123;
-//        RFduinoBLE.iBeaconMinor = 45678;
-//        RFduinoBLE.begin();
-      }
-      while (digitalRead(ButtonB) == LOW) {
-        cnt++;
-        if (cnt > 10000) {
-          break;
-        }
+        //        RFduinoBLE.iBeaconMajor = 123;
+        //        RFduinoBLE.iBeaconMinor = 45678;
+        //        RFduinoBLE.begin();
       }
       cnt = 0;
       BB = false;
@@ -176,9 +164,6 @@ void loop() {
   }
 
 }
-
-
-
 
 
 void my_led_func(bool start, int led_con)
